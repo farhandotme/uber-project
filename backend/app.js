@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const path = require("path");
 const userRouter = require("./routes/user.routes");
+const captainRouter = require("./routes/captain.routes");
 
 const cors = require("cors");
 app.use(cors());
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 // routes-----
 app.use("/users", userRouter);
+app.use("/captains", captainRouter);
 
 // PORT --- and connection DB
 const port = process.env.PORT;
