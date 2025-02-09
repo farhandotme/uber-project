@@ -1,7 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const { registerUser, loginUser } = require("../controllers/user.controller");
+const {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  logoutUser,
+} = require("../controllers/user.controller");
+
+const { authMiddleware } = require("../middlewares/authMiddleware");
 
 router.post(
   "/register",
@@ -17,6 +24,14 @@ router.post(
   registerUser
 );
 
-router.post("/login", [], loginUser);
+router.post(
+  "/login",
+  [body("email").isEmail().withMessage("Please enter email")],
+  loginUser
+);
+
+router.get("/profile", authMiddleware, getUserProfile);
+
+router.get("/logout", logoutUser);
 
 module.exports = router;

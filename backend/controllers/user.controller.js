@@ -7,25 +7,21 @@ const registerUser = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     const { firstname, lastname, email, password } = req.body;
     if (!firstname || !email || !password) {
       return res.status(400).json({ message: "Please fill all fields" });
     }
-
     const userExists = await userModel.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
-
     const user = await userModel.create({
       fullname: { firstname, lastname },
       email,
       password,
     });
-
     const token = user.generateJWT();
-
+    res.cookie("token", token);
     return res
       .status(201)
       .json({ message: "User registered successfully", user, token });
@@ -50,6 +46,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
     const token = user.generateJWT();
+    res.cookie("token", token);
     return res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     console.error(error);
@@ -57,4 +54,13 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const getUserProfile = async (req, res) => {
+  return res.status(200).json(req.user);
+};
+
+const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  return res.status(200).json({ message: "Logout successful" });
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, logoutUser };
