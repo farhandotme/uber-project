@@ -18,7 +18,7 @@ export const Home = () => {
           <p className="mb-6">
             Enter your pickup and drop-off locations to request a ride.
           </p>
-          <Link to="/user-register"> <button className="flex justify-center items-center gap-5 w-full p-3 bg-black text-white rounded-lg hover:bg-gray-800 transition duration-300">
+          <Link to="/user-login"> <button className="flex justify-center items-center gap-5 w-full p-3 bg-black text-white rounded-lg hover:bg-gray-800 transition duration-300">
             Get Started <FaArrowRight />
           </button></Link>
         </div>
