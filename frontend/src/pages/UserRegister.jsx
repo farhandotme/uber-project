@@ -1,31 +1,56 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash, FaArrowRight } from "react-icons/fa";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContextData } from "../context/UserContext";
 
 export const UserRegister = () => {
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false)
+  const { setUser } = useContext(UserContextData);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log({
-      fullname: {
-        firstname,
-        lastname
-      }, email, password
-    });
+    const user = {
+      firstname,
+      lastname,
+      email,
+      password,
+    };
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/users/register`,
+        user
+      );
+      console.log("response", response);
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        setUser(response.data.user);
+        navigate("/home");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
+    }
   };
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ToastContainer />
       <div className="flex-grow">
         <div className="flex flex-col items-center justify-center">
           <img
@@ -33,10 +58,16 @@ export const UserRegister = () => {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaI0-AaIAcwVCkcnR8xdetso-wz9rCOVJB5Q&s"
             alt="Uber Logo"
           />
-          <form className="flex flex-col m-6 w-full max-w-md p-6 bg-white rounded-lg" onSubmit={handleRegister}>
-            <div className='flex justify-between gap-2'>
+          <form
+            className="flex flex-col m-6 w-full max-w-md p-6 bg-white rounded-lg"
+            onSubmit={handleRegister}
+          >
+            <div className="flex justify-between gap-2">
               <div className="flex-1">
-                <label className="text-xl font-bold mt-5 mb-2" htmlFor="firstname">
+                <label
+                  className="text-xl font-bold mt-5 mb-2"
+                  htmlFor="firstname"
+                >
                   First Name
                 </label>
                 <input
@@ -49,7 +80,10 @@ export const UserRegister = () => {
                 />
               </div>
               <div className="flex-1">
-                <label className="text-xl font-bold mt-5 mb-2" htmlFor="lastname">
+                <label
+                  className="text-xl font-bold mt-5 mb-2"
+                  htmlFor="lastname"
+                >
                   Last Name
                 </label>
                 <input
@@ -99,7 +133,7 @@ export const UserRegister = () => {
           </form>
           <div>
             <p className="text-center">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link to="/user-login" className="text-blue-500">
                 Sign in
               </Link>

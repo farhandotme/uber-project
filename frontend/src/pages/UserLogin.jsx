@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaRegEye, FaRegEyeSlash, FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import axios from "axios";
+import { UserContextData } from "../context/UserContext";
 
 export const UserLogin = () => {
+  const { setUser } = useContext(UserContextData);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -11,14 +18,28 @@ export const UserLogin = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
-
+    const user = { email, password };
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, user);
+      console.log("responce", response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        console.log("logged in")
+        setUser(response.data.user);
+        navigate("/home");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error(error.response.data.message);
+      }
+    }
   }
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ToastContainer />
       <div className="flex-grow">
         <div className="flex flex-col items-center justify-center">
           <img

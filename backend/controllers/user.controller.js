@@ -9,7 +9,7 @@ const registerUser = async (req, res) => {
     }
     const { firstname, lastname, email, password } = req.body;
     if (!firstname || !email || !password) {
-      return res.status(400).json({ message: "Please fill all fields" });
+      return res.status(400).json({ message: "Please fill all fieldsefde" });
     }
     const userExists = await userModel.findOne({ email });
     if (userExists) {
@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ message: "Please fill all fields" });
+      return res.status(401).json({ message: "Please fill all fields" });
     }
     const user = await userModel.findOne({ email }).select("+password");
     if (!user) {

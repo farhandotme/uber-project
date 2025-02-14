@@ -1,24 +1,50 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaRegEye, FaRegEyeSlash, FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContextData } from "../context/UserContext";
 
 export const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({ email, password });
+  const navigate = useNavigate();
 
-  }
+  const { setUser } = useContext(UserContextData);
+
+  // handleSubnmit function to send a POST request to the server
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/captains/login`,
+        { email, password }
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setUser(response.data.captain);
+        navigate("/home");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ToastContainer />
       <div className="flex-grow">
         <div className="flex flex-col items-center justify-center">
           <img
@@ -27,7 +53,7 @@ export const CaptainLogin = () => {
             alt="Uber Logo"
           />
           <h1 className="text-2xl text-[#10b461] font-bold">You are Logging in as captain</h1>
-          <form onSubmit={(e) => { handleSubmit(e) }} className="flex flex-col m-6 w-full max-w-md p-6 bg-white rounded-lg">
+          <form onSubmit={handleSubmit} className="flex flex-col m-6 w-full max-w-md p-6 bg-white rounded-lg">
             <label className="text-xl font-bold mt-5 mb-2" htmlFor="email">
               What&apos;s your email?
             </label>
@@ -75,9 +101,11 @@ export const CaptainLogin = () => {
         </div>
       </div>
       <div className="flex justify-center items-center p-6">
-        <Link to={"/user-login"}><button className="bg-black w-85 h-15 text-white p-2 rounded text-xl">
-          Login as User
-        </button></Link>
+        <Link to={"/user-login"}>
+          <button className="bg-black w-85 h-15 text-white p-2 rounded text-xl">
+            Login as User
+          </button>
+        </Link>
       </div>
     </div>
   );
