@@ -4,21 +4,21 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserContextData } from "../context/UserContext";
+import { CaptainContextData } from "../context/CaptainContext";
 
 export const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const navigate = useNavigate();
 
-  const { setUser } = useContext(UserContextData);
+  const { setCaptain } = useContext(CaptainContextData);
 
-  // handleSubnmit function to send a POST request to the server
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,9 +30,9 @@ export const CaptainLogin = () => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
-        setUser(response.data.captain);
+        setCaptain(response.data.captain);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        navigate("/home");
+        navigate("/captain-home");
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {

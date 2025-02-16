@@ -4,9 +4,7 @@ import { FaRegEye, FaRegEyeSlash, FaArrowRight } from "react-icons/fa";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import { UserContextData } from "../context/UserContext";
-
+import { CaptainContextData } from "../context/CaptainContext";
 export const CaptainRegister = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -17,7 +15,7 @@ export const CaptainRegister = () => {
   const [model, setModel] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { setUser } = useContext(UserContextData);
+  const { setCaptain } = useContext(CaptainContextData);
 
   const navigate = useNavigate();
 
@@ -44,12 +42,12 @@ export const CaptainRegister = () => {
       if (response.status === 201) {
         toast.success(response.data.message);
         console.log(response.data.captain);
-        // token====
+        // token--------------------------------
         const token = response.data.token;
         localStorage.setItem("token", JSON.stringify(token));
 
-        setUser(response.data.captain);
-        navigate("/home");
+        setCaptain(response.data.captain);
+        navigate("/captain-home");
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {

@@ -69,15 +69,9 @@ const getCaptainProfile = async (req, res) => {
 
 // logic for logout captain
 
-const logoutCaptain = async (req, res) => {
-  res.clearCookie("token");
-  return res.status(200).json({ message: "Logout successful" });
-};
-
 // exporting all functions
 module.exports = {
   registerCaptain,
   loginCaptain,
   getCaptainProfile,
-  logoutCaptain,
 };

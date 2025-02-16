@@ -5,10 +5,11 @@ import { UserRegister } from "./pages/UserRegister";
 import { UserLogin } from "./pages/UserLogin";
 import { CaptainRegister } from "./pages/CaptainRegister";
 import { CaptainLogin } from "./pages/CaptainLogin";
-import { MainPage } from "./pages/MainPage";
 import { UserProtectedWrapper } from "./pages/UserProtectedWrapper";
 import { UserLogout } from "./pages/UserLogout";
 import { CaptainLogout } from "./pages/CaptainLogout";
+import { UserPage } from "./pages/UserPage";
+import { CaptainPage } from "./pages/CaptainPage";
 
 function App() {
   return (
@@ -21,9 +22,14 @@ function App() {
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-logout" element={<CaptainLogout />} />
         <Route path="/user-logout" element={<UserLogout />} />
-        <Route path="/home" element={
+        <Route path="/user-home" element={
           <UserProtectedWrapper>
-            <MainPage />
+            <UserPage />
+          </UserProtectedWrapper>
+        } />
+        <Route path="/captain-home" element={
+          <UserProtectedWrapper>
+            <CaptainPage />
           </UserProtectedWrapper>
         } />
       </Routes>

@@ -29,7 +29,7 @@ export const UserLogin = () => {
         console.log("logged in")
         setUser(response.data.user);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        navigate("/home");
+        navigate("/user-home");
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
