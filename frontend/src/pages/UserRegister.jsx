@@ -37,6 +37,7 @@ export const UserRegister = () => {
       if (response.status === 201) {
         toast.success(response.data.message);
         setUser(response.data.user);
+        localStorage.setItem("token", JSON.stringify(response.data.token));
         navigate("/home");
       }
     } catch (error) {

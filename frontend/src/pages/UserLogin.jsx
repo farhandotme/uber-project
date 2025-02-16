@@ -28,6 +28,7 @@ export const UserLogin = () => {
         toast.success(response.data.message);
         console.log("logged in")
         setUser(response.data.user);
+        localStorage.setItem("token", JSON.stringify(response.data.token));
         navigate("/home");
       }
     } catch (error) {

@@ -31,6 +31,7 @@ export const CaptainLogin = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         setUser(response.data.captain);
+        localStorage.setItem("token", JSON.stringify(response.data.token));
         navigate("/home");
       }
     } catch (error) {

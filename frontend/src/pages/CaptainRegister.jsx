@@ -46,7 +46,7 @@ export const CaptainRegister = () => {
         console.log(response.data.captain);
         // token====
         const token = response.data.token;
-        document.cookie = `token=${token}; path=/home`;
+        localStorage.setItem("token", JSON.stringify(token));
 
         setUser(response.data.captain);
         navigate("/home");
