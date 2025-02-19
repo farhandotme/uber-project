@@ -33,12 +33,11 @@ export const UserRegister = () => {
         `${import.meta.env.VITE_API_URL}/users/register`,
         user
       );
-      console.log("response", response);
       if (response.status === 201) {
         toast.success(response.data.message);
         setUser(response.data.user);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        navigate("/home");
+        navigate("/user-home");
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {

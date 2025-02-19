@@ -41,7 +41,6 @@ export const CaptainRegister = () => {
       );
       if (response.status === 201) {
         toast.success(response.data.message);
-        console.log(response.data.captain);
         // token--------------------------------
         const token = response.data.token;
         localStorage.setItem("token", JSON.stringify(token));

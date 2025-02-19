@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user.model");
-const captainModel = require("../models/captain.model");
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -10,10 +9,6 @@ const authMiddleware = async (req, res, next) => {
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await userModel.findById(decoded.id);
-    if (user === null) {
-      const captain = await captainModel.findById(decoded.id);
-      req.captain = captain;
-    }
     req.user = user;
     next();
   } catch (error) {

@@ -6,10 +6,10 @@ const {
   getCaptainProfile,
   logoutCaptain,
 } = require("../controllers/captain.controller");
-const { authMiddleware } = require("../middlewares/authMiddleware");
+const authenticateCaptain = require("../middlewares/authCaptain");
 
 router.post("/register", registerCaptain);
 router.post("/login", loginCaptain);
-router.get("/profile", authMiddleware, getCaptainProfile);
+router.get('/profile', authenticateCaptain, getCaptainProfile);
 
 module.exports = router;

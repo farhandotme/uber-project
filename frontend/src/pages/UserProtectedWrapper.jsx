@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export const UserProtectedWrapper = ({ children }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  console.log(token);
 
   useEffect(() => {
     if (token === null || token === undefined || token === "" || !token) {

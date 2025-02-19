@@ -64,11 +64,19 @@ const loginCaptain = async (req, res) => {
 // logic for get profile details of captain
 
 const getCaptainProfile = async (req, res) => {
-  return res.status(200).json(req.captain);
+  try {
+    const captain = await captainModel.findById(req.captain.id);
+    if (!captain) {
+      return res.status(404).json({ message: "Captain not found" });
+    }
+    return res.status(200).json({ captain });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // logic for logout captain
-
 // exporting all functions
 module.exports = {
   registerCaptain,
